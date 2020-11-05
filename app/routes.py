@@ -1,7 +1,7 @@
 from app import app
 import json
 from flask import render_template, request, jsonify
-from main import 
+
 
 @app.route('/')
 @app.route('/index.html')

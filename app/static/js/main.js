@@ -16,10 +16,17 @@ $(document).ready(function(){
                 /*
                 $("#searchres > ol").remove();
                 $("#searchres").append("<ol></ol>")    */
-                $("#searchres").empty();
-                $("#searchres").append("<ol></ol>")
+                $("#search-item").empty();
+                if(docs.length == 0){
+                    console.log('test');
+                    $("#search-item .mt4:first").append(`
+                        <p>Search Query Are Empty..</p>
+                        <p>Try type some keywords..</p>
+                    `);
+                }
+                $("#search-item").append("<ol></ol>");
                 for(doc=0;doc<docs.length;doc++){
-                    $("#searchres > ol").append(`
+                    $("#search-item > ol").append(`
                         <li><p>${docs[doc][0]}</p></li>
                         <p>Jumlah kata: ${docs[doc][1]} </p>
                         <p>Tingkat Kemiripan: ${docs[doc][2]} </p>
@@ -27,7 +34,7 @@ $(document).ready(function(){
                         <br/>
                     `);  
                 }
-                console.log(docs)
+                console.log(docs);
             }
         })
     }); 

@@ -2,17 +2,99 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Search Engine</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     
 </head>
+
+
 <body>
-    <form>
-        <input type="text" id="livebox" name="inputsearch">
-        <textarea id="testing" name="testing"></textarea>
-        <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
-        <label for="vehicle1"> I have a bike</label><br>
-    </form>
+    <div class="content">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="search-result-box card-box">
+                        <div class="row">
+                            <div class="col-md-8 offset-md-2">
+                                <div class="pt-3 pb-4">
+                                    <div class="input-group">
+                                        <input type="text" id="livebox" class=form-control name="inputsearch">
+                                        <div class="input-group-append">
+                                            <button type="button" class="btn waves-effect waves-light btn-custom"><i class="fa fa-search mr-1"></i>Clear</button>
+                                        </div>
+                                    </div>
+                                    <div class="mt-4 text-center">
+                                        <h4 id="search-res-alert"></h4></div>
+                                    </div>
+                            </div>
+                        </div>
+                        <!-- end row -->
+
+                        
+                        <ul class="nav nav-tabs tabs-bordered">
+                            <li class="nav-item"><a href="#home" data-toggle="tab" aria-expanded="true" class="nav-link active">All results <span class="badge badge-success ml-1"></span></a></li>
+                            <li class="nav-item"><a href="#users" data-toggle="tab" aria-expanded="false" class="nav-link">Options</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="home">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div id="search-item">
+                                            <div class="mt-4 text-center">
+                                                <p>Search Query Are Empty..</p>
+                                                <p>Try type some keywords..</p>
+                                                <h4 class="mb-1"><a href="#">Zircos - Responsive Admin Template</a></h4>
+                                                <div class="font-13 text-success mb-3">https://www.bootdey.com/</div>
+                                                <p class="mb-0 text-muted">Dolor posuere proin blandit accumsan senectus netus nullam curae, ornare laoreet adipiscing luctus mauris adipiscing pretium eget fermentum, tristique lobortis est ut metus lobortis tortor tincidunt himenaeos habitant quis dictumst proin odio sagittis purus mi, nec taciti vestibulum quis in sit varius lorem sit metus mi.</p>
+
+                                            </div>
+                                        </div>
+                                        <!--
+                                        <ul class="pagination justify-content-end pagination-split mt-0">
+                                            <li class="page-item"><a class="page-link" href="#" aria-label="Previous"><span aria-hidden="true">«</span> <span class="sr-only">Previous</span></a></li>
+                                            <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                            <li class="page-item active"><a class="page-link" href="#">2</a></li>
+                                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                            <li class="page-item"><a class="page-link" href="#">4</a></li>
+                                            <li class="page-item"><a class="page-link" href="#">5</a></li>
+                                            <li class="page-item"><a class="page-link" href="#" aria-label="Next"><span aria-hidden="true">»</span> <span class="sr-only">Next</span></a></li>
+                                        </ul>
+                                    -->
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
+                            </div>
+                         
+                            <!-- end All results tab -->
+                            <!-- Users tab -->
+                            <div class="tab-pane" id="users">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="exampleFormControlTextarea1">List Of External URL</label>
+                                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="exampleInputPassword1">Number of Internal Doc</label>
+                                            <input type="number" class="form-control" id="numberofinternaldoc" placeholder="Input 1 to 15">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- end Users tab -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- end row -->
+        </div>
+        <!-- container -->
+    </div>
+
     <!--
     <div class="buttons">
         <button class="button" type="button" onclick="showOptions()">Options</button>
@@ -31,8 +113,9 @@
             
         </div> 
     </div> -->
-    <div id="searchres">
-    </div>
 </body>
 <script src="static/js/main.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 </html>

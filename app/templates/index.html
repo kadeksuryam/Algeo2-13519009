@@ -35,6 +35,7 @@
                         
                         <ul class="nav nav-tabs tabs-bordered">
                             <li class="nav-item"><a href="#home" data-toggle="tab" aria-expanded="true" class="nav-link active">All results <span class="badge badge-success ml-1"></span></a></li>
+                            <li class="nav-item"><a href="#details" data-toggle="tab" aria-expanded="false" class="nav-link">Details</a></li>
                             <li class="nav-item"><a href="#options" data-toggle="tab" aria-expanded="false" class="nav-link">Options</a></li>
                             <li class="nav-item"><a href="#about" data-toggle="tab" aria-expanded="false" class="nav-link">About</a></li>
                         </ul>
@@ -53,7 +54,30 @@
                                     </div>
                                 </div>
                             </div>
-                         
+
+                            <!-- Details Tab -->
+                            <div class="tab-pane" id="details">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <table class="table table-hover">
+                                            <thead>
+                                              <tr>
+                                                <th scope="col">Term</th>
+                                                <th scope="col">Query</th>
+                                                <th scope="col">D1</th>
+                                              </tr>
+                                            </thead>
+                                            <tbody>
+                                              <tr>
+                                                <td>Term1</td>
+                                                <td>1</td>
+                                                <td>1</td>
+                                              </tr>
+                                            </tbody>
+                                          </table>                                          
+                                    </div>
+                                </div>
+                            </div>
                             <!-- end All results tab -->
                             <!-- Options tab -->
                             <div class="tab-pane" id="options">
@@ -65,14 +89,40 @@
                                             <textarea class="form-control" id="external-url-list" rows="3" placeholder="Input List of URLs Here..."></textarea>
                                         </div>
                                     </div>
+                                    <!--
                                     <div class="col-md-4">
+                                        
                                         <div class="form-group">
                                             <label for="number-of-internal-doc">Number of Internal Doc</label>
                                             <input type="number" class="form-control" id="number-of-internal-doc" placeholder="Input 1 to 15" value="2">
-                                        </div>
+                                        </div> 
+                                    </div> -->
+                                    <div class="col-md-4">
+                                        <form id="upload-file" method="post" enctype="multipart/form-data">
+                                            <fieldset>
+                                                <p id="msg"></p>
+	                                
+                                                <label for="files[]">Select one or multiple files</label>
+                                                <input type="file" id="multiFiles" name="files[]" multiple="multiple" accept=".txt, .html">
+                                            <!--    <input name="file" type="file"> -->
+                                            </fieldset>
+                                            <fieldset>
+                                                <button id="upload-file-btn" type="button">Upload</button>
+                                            </fieldset>
+                                        </form> 
+                                        <!--
+                                        <form method="POST" enctype="multipart/form-data">
+                                            <input type="file" name="file[]" multiple="">
+                                            <input type="submit" value="add">
+                                        </form> -->
+                                    </div> 
+                                    <div class="col-md-4">
+                                        <br/><p>Files in server: Empty</p>
+                                        <div class="fileinserver"></div>
                                     </div>
                                 </div>
                             </div>
+
                             <!-- end Options tab -->
                             <div class="tab-pane" id="about">
                                 <br/>

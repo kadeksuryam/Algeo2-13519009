@@ -81,7 +81,9 @@ def documentToVector(document, searchQuery):
         query_kemunculan.append(cntKemunculan)
     return query_kemunculan
 
-def mainSearch(searchQuery, externalDoc=None, internalDoc=None):
+def jumlahKata()
+
+def mainSearch(searchQuery, externalDoc=None):
     #internalDoc --> jumlah document internal
     #externalDoc --> list of urls
     #searchQuery --> dalam string, ubah ke vektor terlebih dahulu
@@ -93,8 +95,8 @@ def mainSearch(searchQuery, externalDoc=None, internalDoc=None):
     for url in urls:
         html = urllib.request.urlopen(url).read()
         html = htmlToStrings(html)
-        html_vector = documentToVector(hmtl, searchQuery)
-        jml_kata = jumlahKata(html, searchQuery)       
+        html_vector = documentToVector(html, searchQuery)
+        jml_kata = jumlahKata(html_vector)       
         kemiripan = similiarity(html_vector, searchQuery_vector)
         kalimat_pertama = firstSentence(html)
 
@@ -104,6 +106,9 @@ def mainSearch(searchQuery, externalDoc=None, internalDoc=None):
     basedir = os.path.abspath(os.path.dirname(__file__))
     data_file = os.path.join(basedir, 'static/txt/doc1.txt')
     print("tes")
+
+    #return tuple hasil
+    return [('Dokumen1', '100', '80', 'tes123')]
 
 if(__name__ == "__main__"):  
     

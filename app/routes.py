@@ -47,16 +47,22 @@ def upload():
             file_ext = os.path.splitext(filename)[1]
             if(file_ext not in app.config['UPLOAD_EXTENSIONS']):
                 return "", 404
-            uploaded_file.save(os.path.join(app.config['UPLOAD_PATH'], filename))
-    filenames= [f for f in listdir(app.config['UPLOAD_PATH']) if isfile(join(app.config['UPLOAD_PATH'], f))]  
+            if(file_ext == '.txt'): uploaded_file.save(os.path.join(join(app.config['UPLOAD_PATH'], 'txt'), filename))
+            else: uploaded_file.save(os.path.join(join(app.config['UPLOAD_PATH'], 'html'), filename))
+    filenames=[f for f in listdir(join(app.config['UPLOAD_PATH'], 'txt')) if isfile(join(join(app.config['UPLOAD_PATH'], 'txt'), f))]  
+    filenames+=[f for f in listdir(join(app.config['UPLOAD_PATH'], 'html')) if isfile(join(join(app.config['UPLOAD_PATH'], 'html'), f))]  
     return jsonify(filenames)
 
 @app.route('/deletefile', methods=['POST', 'GET'])
 def deletefile():
     fileName = request.args['text']
     #fileName = request.form
-    os.remove(join(app.config['UPLOAD_PATH'], fileName))
-    filenames= [f for f in listdir(app.config['UPLOAD_PATH']) if isfile(join(app.config['UPLOAD_PATH'], f))]
+    file_ext = os.path.splitext(fileName)[1]
+    print(file_ext)
+    if(file_ext == '.txt'): os.remove(join(join(app.config['UPLOAD_PATH'], 'txt'), fileName))
+    else: os.remove(join(join(app.config['UPLOAD_PATH'], 'html'), fileName))
+    filenames=[f for f in listdir(join(app.config['UPLOAD_PATH'], 'txt')) if isfile(join(join(app.config['UPLOAD_PATH'], 'txt'), f))]  
+    filenames+=[f for f in listdir(join(app.config['UPLOAD_PATH'], 'html')) if isfile(join(join(app.config['UPLOAD_PATH'], 'html'), f))] 
     return jsonify(filenames)
 
 if(__name__ == "__main__"):

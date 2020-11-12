@@ -1,7 +1,7 @@
 @echo off
 cd %CD%/
 echo Creating the Virtual Environment...
-python3 -m venv venv
+py -m venv venv
 
 echo --------------------------------
 echo Activating the Virtual Environment...
@@ -10,6 +10,8 @@ call venv\Scripts\activate
 echo --------------------------------
 echo Installing the Requirements...
 pip install -r requirements.txt
+py -m nltk.downloader punkt
+py -m nltk.downloader stopwords
 set FLASK_APP=searchengine.py
 
 echo --------------------------------

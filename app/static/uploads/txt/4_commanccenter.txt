@@ -1,0 +1,127 @@
+Dump of assembler code for function CommandCenter:
+   0x00000f4f <+0>:     push   %ebx
+   0x00000f50 <+1>:     sub    $0x18,%esp
+   0x00000f53 <+4>:     call   0xad0 <__x86.get_pc_thunk.bx>
+   0x00000f58 <+9>:     add    $0x4008,%ebx
+   0x00000f5e <+15>:    mov    %gs:0x14,%eax
+   0x00000f64 <+21>:    mov    %eax,0xc(%esp)
+   0x00000f68 <+25>:    xor    %eax,%eax
+
+   0x00000f6a <+27>:    lea    0x4(%esp),%eax
+   0x00000f6e <+31>:    push   %eax
+   0x00000f6f <+32>:    lea    0xc(%esp),%eax
+   0x00000f73 <+36>:    push   %eax
+   0x00000f74 <+37>:    lea    -0x23a9(%ebx),%eax		ida said "%d %d"
+   0x00000f7a <+43>:    push   %eax
+   0x00000f7b <+44>:    pushl  0x2c(%esp)			<< input
+   0x00000f7f <+48>:    call   0x9b0 <__isoc99_sscanf@plt>	probably usual double input
+
+
+   0x00000f84 <+53>:    add    $0x10,%esp
+   0x00000f87 <+56>:    cmp    $0x2,%eax			< asking for two argument
+   **0x00000f8a <+59>:    jne    0xf98 <CommandCenter+73>	< not two argument then die
+   0x00000f8c <+61>:    mov    0x4(%esp),%eax			maybe eax = second arg
+   0x00000f90 <+65>:    sub    $0x2,%eax			eax -= 2
+   0x00000f93 <+68>:    cmp    $0x2,%eax			cmp eax and 2
+   0x00000f96 <+71>:    jbe    0xf9d <CommandCenter+78>		unsigned (?) eax <= 2	[2,4]	<-- do this
+
+
+   **0x00000f98 <+73>:    call   0x1538 <bad_instruction>
+
+
+   0x00000f9d <+78>:    sub    $0x8,%esp
+   0x00000fa0 <+81>:    pushl  0xc(%esp)		-> wait its second arg
+   0x00000fa4 <+85>:    push   $0x5			-> its default 5
+			??? not sure but i think func4 take arg 1 and arg 2 above
+			nope its take first arg and 5, 
+			func4(5,second)
+   0x00000fa6 <+87>:    call   0xf0c <func4>		!!! ah shit another subsection
+   0x00000fab <+92>:    add    $0x10,%esp		and probably eax is func 4 return
+   0x00000fae <+95>:    cmp    %eax,0x8(%esp)		must eax == *(esp+8)		??? with my shit guess, its second arg above
+   0x00000fb2 <+99>:    je     0xfb9 <CommandCenter+106>			<-- do this
+   **0x00000fb4 <+101>:   call   0x1538 <bad_instruction>
+
+24 2
+   --- end sequence ---
+   0x00000fb9 <+106>:   mov    0xc(%esp),%eax
+   0x00000fbd <+110>:   xor    %gs:0x14,%eax
+   0x00000fc4 <+117>:   jne    0xfcb <CommandCenter+124>
+   0x00000fc6 <+119>:   add    $0x18,%esp
+   0x00000fc9 <+122>:   pop    %ebx
+   0x00000fca <+123>:   ret
+
+
+   0x00000fcb <+124>:   call   0x24d0 <__stack_chk_fail_local>
+
+
+
+
+
+
+
+
+Dump of assembler code for function func4:
+			lets call it func4(counter,arg)
+	save var
+   0x00000f0c <+0>:     push   %edi
+   0x00000f0d <+1>:     push   %esi
+   0x00000f0e <+2>:     push   %ebx
+
+
+	core
+			init
+   0x00000f0f <+3>:     mov    0x10(%esp),%ebx			??? input 3 4, causing it 5?, /// input 5 <-- this one must be counter
+   0x00000f13 <+7>:     mov    0x14(%esp),%edi			!! arg
+   0x00000f17 <+11>:    mov    $0x0,%eax			!! eax = 0
+
+			probably loop
+   0x00000f1c <+16>:    test   %ebx,%ebx			cant be changed
+   0x00000f1e <+18>:    jle    0xf27 <func4+27>
+
+   0x00000f20 <+20>:    mov    %edi,%eax			eax = arg <<<<<<<
+   0x00000f22 <+22>:    cmp    $0x1,%ebx			if counter == 1, fallthrough return
+   0x00000f25 <+25>:    jne    0xf2b <func4+31>
+
+
+
+	load var and return
+ #  0x00000f27 <+27>:    pop    %ebx
+ #  0x00000f28 <+28>:    pop    %esi
+ #  0x00000f29 <+29>:    pop    %edi
+ #  0x00000f2a <+30>:    ret
+
+
+			if counter != 1
+   0x00000f2b <+31>:    sub    $0x8,%esp			
+   0x00000f2e <+34>:    push   %edi
+   0x00000f2f <+35>:    lea    -0x1(%ebx),%eax			eax = counter - 1
+   0x00000f32 <+38>:    push   %eax				
+   0x00000f33 <+39>:    call   0xf0c <func4>			func4(counter - 1, arg)
+								ah shit this is recursive call
+
+   0x00000f38 <+44>:    add    $0x8,%esp
+   0x00000f3b <+47>:    lea    (%eax,%edi,1),%esi		result = func(counter - 1,arg) + arg
+   0x00000f3e <+50>:    push   %edi				still 1st arg
+   0x00000f3f <+51>:    sub    $0x2,%ebx			counter -= 2
+   0x00000f42 <+54>:    push   %ebx				
+   0x00000f43 <+55>:    call   0xf0c <func4>			func4(counter - 2, arg)
+								recursive call again tf
+
+   0x00000f48 <+60>:    add    $0x10,%esp
+   0x00000f4b <+63>:    add    %esi,%eax			result += func4(counter - 2, arg)
+   0x00000f4d <+65>:    jmp    0xf27 <func4+27>
+
+
+
+def k(a,b):
+    if a <= 0:
+        return 0
+    if a != 1:
+        return k(a-1,b) + b + k(a-2,b)
+    return 2
+
+
+1 2
+2 3
+3 4
+4 5

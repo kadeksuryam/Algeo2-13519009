@@ -7,11 +7,11 @@ import string
 from collections import OrderedDict
 from os import listdir
 from os.path import isfile, join
-import nltk
+#import nltk
 from nltk.tokenize import word_tokenize 
 from nltk.tokenize import sent_tokenize
-from Sastrawi.StopWordRemover.StopWordRemoverFactory import StopWordRemoverFactory
-from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
+from nltk.stem import PorterStemmer 
+from nltk.corpus import stopwords
 
 #$nltk.download()
 '''
@@ -39,36 +39,6 @@ def htmlToStrings(body):
 #    visible_texts = filter(tag_visible, texts)  
 #    return u" ".join(t.strip() for t in visible_texts)
 '''
-def txtToStrings(txt_path):
-    WORDS = []
-    with open(txt_path, "r", encoding="mbcs") as file:
-        for line in file.readlines():
-            WORDS.append(line.rstrip())
-    WORDS = ''.join(WORDS)   
-    return WORDS
-
-#searchquery sudah dalam vektor, tapi belum tunggal
-def queryTunggal(query_words, query_words_tunggal):
-    query_kemunculan = []
-    for word_set in query_words_tunggal:
-        cntKemunculan = 0
-        for word_list in query_words:
-            if(word_set == word_list):
-                cntKemunculan += 1
-        query_kemunculan.append(cntKemunculan)
-    return query_kemunculan
-
-#document sudah dalam string
-#search query sudah dalam vector of words
-def documentToVector(document, searchQuery):
-    doc_words = document.split()
-    query_kemunculan = []
-    for query in searchQuery:
-        cntKemunculan = 0
-        for word in doc_words:
-            if(word == query): cntKemunculan += 1
-        query_kemunculan.append(cntKemunculan)
-    return query_kemunculan
 '''
 #Mengembalian array of tuple hasil
 def processExternal(searchQuery_vector):
@@ -84,7 +54,7 @@ def processExternal(searchQuery_vector):
         search_result.append((url, jml_kata, kemiripan, kalimat_pertama))
     return "tes"
 '''
-def similiarity(searchQuery_vector, txt_file_vec):
+def similiarity(searchQuery_vector, doc_vec):
     return "tes"
 
 def getFirstSentence(txt_file_words):
@@ -93,7 +63,7 @@ def getFirstSentence(txt_file_words):
 def processTXT(filePath, searchQuery_vector, query_words_tunggal): 
     #Ubah isi dalam TXT ke vektor, sebelumnya distemming dan dibersihkan dulu
     #Ubah txt ke string dulu
-    txt_file_words = open(filePath).read()
+    txt_file_words = open(filePath, encoding="utf8").read()
     
     #bersihkan string
     cleanedString = cleanTheString(txt_file_words)
@@ -147,9 +117,10 @@ def processInternal(searchQuery_vector, query_words_tunggal):
     for f in listdir(internal_txt_path):
         if(isfile(join(internal_txt_path, f))):
             kemiripan, jumlahkata, kalimatPertama, terms = processTXT(join(internal_txt_path, f), searchQuery_vector, query_words_tunggal)
-            hasil_internal.append((f[:len(f)-4], kemiripan, jumlahkata, kalimatPertama, terms))
-        #    print(terms)
-        #print(f)
+        #    terms = [list(item) for item in terms]
+            if(len(terms) != 0): 
+                hasil_internal.append((f[:len(f)-4], jumlahkata, kemiripan, kalimatPertama, 'internal', terms))
+ 
     '''
     #proses semua html
     external_html_path = os.path.join(basedir, 'static/uploads/html/')
@@ -157,6 +128,7 @@ def processInternal(searchQuery_vector, query_words_tunggal):
         if(isfile(f)): processHTML(join(internal_txt_path, f), searchQuery_vector, query_words_tunggal)
         #print(f)
     '''
+ #   print(hasil_internal)
     return hasil_internal
 
 def cleanTheString(strings):
@@ -175,16 +147,24 @@ def cleanTheString(strings):
     #hapus whitespace
     strings = strings.strip()
 
-    #lakukan filtering dengan sastrawi
-    factory_stop_word = StopWordRemoverFactory()
-    stopword = factory_stop_word.create_stop_word_remover()
-    strings = stopword.remove(strings)
+    #lakukan filtering dengan nltk
+    tokens = word_tokenize(strings)
+    listStopword =  set(stopwords.words('english'))
 
-    #lakukan stemming dengan sastrawi
-    factory_stemmer = StemmerFactory()
-    stemmer = factory_stemmer.create_stemmer()
-    strings = stemmer.stem(strings)
+    removed = []
+    for t in tokens:
+        if t not in listStopword:
+            removed.append(t)
+    strings = " ".join(removed)
 
+    #lakukan stemming dengan nltk
+    ps = PorterStemmer()
+    stemmed_string = []
+    for word in strings.split():
+        stemmed_string.append(ps.stem(word))
+    strings = ' '.join(stemmed_string)
+
+#    print(stemmed_string)
     #hitung kemunculan setiap terms dalam pair (kata, jumlah_kemunculan)
     strings = strings.split()
     strings_tunggal = list(OrderedDict.fromkeys(strings))
@@ -194,7 +174,7 @@ def cleanTheString(strings):
         for word in strings:
             if(word == word_tunggal): cntWord += 1
         hasil.append((word_tunggal, cntWord))
-    
+#    print(hasil)
     return hasil
     
 def mainSearch(searchQuery, externalDoc=""):
@@ -202,22 +182,34 @@ def mainSearch(searchQuery, externalDoc=""):
     
     #bersihkan query, lakukan stemming, filtering (hapus stopwords)
     cleaned_query = cleanTheString(searchQuery)
+    
     vector_query = [i[1] for i in cleaned_query]
     query_words = [i[0] for i in cleaned_query]
-
+    
+#    print(query_words)
     search_result = []
 #    print(vector_query)
 #    print(query_words)
     #proses internal dokumen
     search_result += processInternal(vector_query, query_words)
-
+    
     #proses external dokumen
-#    search_result += processExternal(vector_query, query_words, externalURLs)
 
-    return search_result
+    #setelah internal dan external sudah diproses, pecah data menjadi dua bagian
+    vec_terms_res = [i[5] for i in search_result]
+
+    for i in range(0, len(vec_terms_res)):
+        for j in range(0, len(vec_terms_res[i])):
+            vec_terms_res[i][j] = vec_terms_res[i][j][1]
+    vec_terms = [vector_query] + vec_terms_res
+    
+#    print(vec_terms)
+    return search_result, query_words, vec_terms
+    
+#    return "test"
 
 
 if(__name__ == "__main__"):  
-    print(mainSearch("jepang indonesia jepang"))
+    mainSearch("tes satu dua")
     #print(htmlToStrings(html))
     #print(htmlToStrings("https://en.wikipedia.org/wiki/Computer_science"))

@@ -15,6 +15,7 @@ $(document).ready(function(){
         $("#livebox").val('');
         $("#livebox").trigger("input");
     });
+    //Main function
     $("#livebox").on("input", function(e){
         textinlivebox = $("#livebox").val();
         console.log(textinlivebox);
@@ -23,9 +24,6 @@ $(document).ready(function(){
             url:"/search",
             data:{text:textinlivebox},
             success:function(docs){
-                /*
-                $("#searchres > ol").remove();
-                $("#searchres").append("<ol></ol>")    */
                 $("#search-item").empty();
                 if(docs.length == 0){
                     $("#search-item").append('<div class="mt-4 text-center">');
@@ -35,27 +33,55 @@ $(document).ready(function(){
                         <p>Try to type some keywords...</p>  
                     `);
                 }
-                $("#search-item").append("<ol></ol>");
-                for(doc=0;doc<docs.length;doc++){
-                    $("#search-item").append(`<h4 class="mb-1"><a href="#">${docs[doc][0]}</a></h4>`);
-                    $("#search-item").append(`<p>Jumlah kata: ${docs[doc][1]} </p>`);
-                    $("#search-item").append(`<p>Tingkat Kemiripan: ${docs[doc][2]}%</p>`);
-                    $("#search-item").append(`<p>Konten:</p>`);
-                    $("#search-item").append(`<div class="content-box">${docs[doc][3]}</div>`);
-                    $("#search-item").append(`<hr/>`);
-                    /*
-                        <h4 class="mb-1"><a href="#"></a>${docs[doc][0]}</h4>
-                        <li></li>
-                        <li><p>${docs[doc][0]}</p></li>
-                        <p>Jumlah kata: ${docs[doc][1]} </p>
-                        <p>Tingkat Kemiripan: ${docs[doc][2]} </p>
-                        <p>${docs[doc][3]}</p>
-                        <br/>
-                    `); */  
-                    //$("#search-item").append(`<h4 class="mb-1"><a href="#">${docs[doc][0]}</a></h4>`);
-                    
+                
+                //Append term-term dari menurut dokumen pertama (lainnya akan mengikuti)
+                //notes : tambahkan url (kalau internal bilang internal)
+                //pada tabel, D1 adalah dokumen yang paling relevan (supaya mudah)
+            //    console.log(docs)
+                
+                $('#details .table thead tr').empty()
+                $('#details .table thead tr').append(`<th scope="col">Term</th>`)
+                $('#details .table thead tr').append(`<th scope="col">Query</th>`)
+                console.log(docs)
+                $('#details .table tbody').empty()
+                //Masukkan header
+                for(var i=0;i<docs["result"].length;i++) $('#details .table thead tr').append(`<th scope="col">D${i+1}</th>`)
+                //Masukkan terms
+                for(var j=0;j<docs["terms"].length;j++){
+                    $('#details .table tbody').append(`<tr class="isi"><th scope="row">${docs["terms"][j]}</th></tr>`)
                 }
-                console.log(docs);
+
+                //Masukkan kemunculan term
+      
+                for(var j=0;j<docs["vec_terms"].length;j++){
+                    for(var k=0;k<docs["vec_terms"][j].length;k++){
+                        $(`#details .table tbody .isi:nth-child(${k+1})`).append(`<td>${docs["vec_terms"][j][k]}</td>`)
+                    }
+                }
+                
+                //Munculkan pesan
+                
+                /*
+                for(var i=0;i<(docs.length-2)/2;i++){
+                //    console.log(docs[2*i+1].length)
+                    for(var k=0;k<docs[docs.length-2].length;k++){
+                        for(var j=0;j<docs[2*i+1].length;j++){  
+                            $(`#details .table tbody .isi:nth-child(${k+1})`).append(`<td>${docs[2*i+1][j]}</td>`)
+                        } 
+                    }
+                } */
+
+
+                $("#search-item").append("<ol></ol>");
+                for(doc=0;doc<docs["result"].length;doc++){
+                    $("#search-item").append(`<h4 class="mb-1"><a href="#">${docs["result"][doc][0]}</a></h4>`);
+                    $("#search-item").append(`<p>Jumlah kata: ${docs["result"][doc][1]} </p>`);
+                    $("#search-item").append(`<p>Tingkat Kemiripan: ${docs["result"][doc][2]}% </p>`);
+                    $("#search-item").append(`<p>Konten:</p>`);
+                    $("#search-item").append(`<div class="content-box">${docs["result"][doc][3]}</div>`);
+                    $("#search-item").append(`<hr/>`);  
+                } 
+                console.log(docs["terms"]);
             }
         })
     }); 
@@ -110,6 +136,7 @@ $(document).ready(function(){
                     $('#options .row .col-md-4:nth-child(3) p').append(`Files in server: `);
                     $('#msg').html('<span style="color:green">Files successfuly uploaded</span>');
                     fileinserver(data);
+                    $("#livebox").trigger("input");
                 },
                 error: function(){
                     $('#msg').html('<span style="color:red">Files must be in txt or html</span>');
@@ -137,6 +164,7 @@ $(document).ready(function(){
                 data:{text:fileName},
                 success: function(data) {
                     fileinserver(data)
+                    $("#livebox").trigger("input");
                 },
             }); 
         }); 

@@ -1,0 +1,92 @@
+Dump of assembler code for function HQ:
+   Save variables
+   0x00000da4 <+0>:     push   %edi
+   0x00000da5 <+1>:     push   %esi
+   0x00000da6 <+2>:     push   %ebx
+
+   0x00000da7 <+3>:     sub    $0x28,%esp
+   0x00000daa <+6>:     call   0xad0 <__x86.get_pc_thunk.bx>
+   0x00000daf <+11>:    add    $0x41b1,%ebx
+   0x00000db5 <+17>:    mov    %gs:0x14,%eax
+   0x00000dbb <+23>:    mov    %eax,0x24(%esp)
+   0x00000dbf <+27>:    xor    %eax,%eax
+
+   0x00000dc1 <+29>:    lea    0xc(%esp),%eax
+   0x00000dc5 <+33>:    push   %eax			<<< not sure
+   0x00000dc6 <+34>:    pushl  0x3c(%esp)		<<< input
+   0x00000dca <+38>:    call   0x160e <read_six_numbers>		?? lets just assume esp stay fixed
+
+   0x00000dcf <+43>:    add    $0x10,%esp				?? then it will take fifth arg
+   0x00000dd2 <+46>:    cmpl   $0x0,0x4(%esp)				!! first arg must be 0 to avoid jump
+   ** 0x00000dd7 <+51>:    jne    0xde0 <HQ+60> 		
+   0x00000dd9 <+53>:    cmpl   $0x1,0x8(%esp)				!! second arg must be 1 to jump
+ |<0x00000dde <+58>:    je     0xde5 <HQ+65> 		<-- do this
+ |
+ | ** 0x00000de0 <+60>:    call   0x1538 <bad_instruction>
+ |  
+ |>0x00000de5 <+65>:    lea    0x4(%esp),%esi	!! first arg
+   0x00000de9 <+69>:    lea    0x14(%esp),%edi	!! fifth arg
+   0x00000ded <+73>:    jmp    0xdf6 <HQ+82>   >|
+						|
+|>  0x00000def <+75>:    add    $0x4,%esi	|	esi = address third arg
+|   0x00000df2 <+78>:    cmp    %edi,%esi	|	!! form loop
+|   0x00000df4 <+80>:    je     0xe07 <HQ+99>	|		       >|
+|   						|			|
+|						|			|
+|   0x00000df6 <+82>:    mov    0x4(%esi),%eax <|			|	eax = third arg
+|   0x00000df9 <+85>:    add    (%esi),%eax				|	eax = third arg + second arg
+|   0x00000dfb <+87>:    cmp    %eax,0x8(%esi)				|	third arg + second arg == fourth arg
+|<  0x00000dfe <+90>:    je     0xdef <HQ+75>		<-- do this	|       ^ must be true
+									|
+   ** 0x00000e00 <+92>:    call   0x1538 <bad_instruction>		|
+   ** 0x00000e05 <+97>:    jmp    0xdef <HQ+75>				|
+									|
+									|
+   0x00000e07 <+99>:    mov    0x1c(%esp),%eax			       <|
+   0x00000e0b <+103>:   xor    %gs:0x14,%eax		<<< stack canary
+   # 0x00000e12 <+110>:   jne    0xe1b <HQ+119>
+   0x00000e14 <+112>:   add    $0x20,%esp
+
+   Take back stored variables
+   0x00000e17 <+115>:   pop    %ebx
+   0x00000e18 <+116>:   pop    %esi
+   0x00000e19 <+117>:   pop    %edi
+   0x00000e1a <+118>:   ret
+
+
+   # 0x00000e1b <+119>:   call   0x24d0 <__stack_chk_fail_local> <<< stack buffer overflow check
+
+
+
+Dump of assembler code for function read_six_numbers:
+   0x0000160e <+0>:     push   %ebx
+   0x0000160f <+1>:     sub    $0x8,%esp
+   0x00001612 <+4>:     call   0xad0 <__x86.get_pc_thunk.bx>
+
+
+   0x00001617 <+9>:     add    $0x3949,%ebx		???
+   0x0000161d <+15>:    mov    0x14(%esp),%eax 		!! eax = input
+   0x00001621 <+19>:    lea    0x14(%eax),%edx		!! push(input + 20)
+   0x00001624 <+22>:    push   %edx
+   0x00001625 <+23>:    lea    0x10(%eax),%edx		!! push(input + 16)
+   0x00001628 <+26>:    push   %edx
+   0x00001629 <+27>:    lea    0xc(%eax),%edx		!! push(input + 12)
+   0x0000162c <+30>:    push   %edx
+   0x0000162d <+31>:    lea    0x8(%eax),%edx		!! push(input + 8)
+   0x00001630 <+34>:    push   %edx
+   0x00001631 <+35>:    lea    0x4(%eax),%edx		!! push(input + 4)
+   0x00001634 <+38>:    push   %edx
+   0x00001635 <+39>:    push   %eax			!! push(input)
+   0x00001636 <+40>:    lea    -0x23b5(%ebx),%eax	( from ida "%d %d %d %d" ??? )
+   0x0000163c <+46>:    push   %eax
+   0x0000163d <+47>:    pushl  0x2c(%esp)
+   0x00001641 <+51>:    call   0x9b0 <__isoc99_sscanf@plt>	
+    sscanf(input,"%d %d %d %d %d %d",&a[0],&a[1],&a[2],&a[3],&a[4],&a[5]);
+   0x00001646 <+56>:    add    $0x20,%esp		?? again, assume eax is unchanged after scanf, so eax is first arg
+   0x00001649 <+59>:    cmp    $0x5,%eax		?? in order to avoid jle, eax > 5
+   ** 0x0000164c <+62>:    jle    0x1653 <read_six_numbers+69>		!! failure
+   0x0000164e <+64>:    add    $0x8,%esp
+   0x00001651 <+67>:    pop    %ebx
+   0x00001652 <+68>:    ret
+
+   ** 0x00001653 <+69>:    call   0x1538 <bad_instruction>

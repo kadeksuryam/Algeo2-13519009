@@ -5,7 +5,7 @@ import os
 from werkzeug.utils import secure_filename
 from os import listdir
 from os.path import isfile, join
-#import main
+from .main import mainSearch
 
 #Global variabel
 externalUrls=""
@@ -20,10 +20,10 @@ def index():
 def search():
     #anggap tupel berbentuk (judul, jumlahkata, tingkat kemiripan, kalimat pertama, [(term, nq, nd1, nd2...)])
     queries = request.form.get("text")
-    matchDocs = [('Dokumen1', '100', '80', 'tes123')]
-    if(queries == ""): matchDocs = []
+    if(queries == ""): matchDocs, terms, vec_terms = [], [], []
+    else: matchDocs, terms, vec_terms = mainSearch(queries)
  #   else: matchDocs = main.mainSearch(queries, externalUrls)
-    return jsonify(matchDocs)
+    return jsonify({"result" : matchDocs, "terms" : terms, "vec_terms": vec_terms})
 
 @app.route('/externalDoc', methods=["POST", "GET"])
 def externalURLs():

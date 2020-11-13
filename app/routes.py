@@ -6,7 +6,7 @@ from werkzeug.utils import secure_filename
 from os import listdir
 from os.path import isfile, join
 from .main import mainSearch
-
+import urllib.request
 #Global variabel
 externalUrls=""
 
@@ -64,6 +64,19 @@ def deletefile():
     filenames=[f for f in listdir(join(app.config['UPLOAD_PATH'], 'txt')) if isfile(join(join(app.config['UPLOAD_PATH'], 'txt'), f))]  
     filenames+=[f for f in listdir(join(app.config['UPLOAD_PATH'], 'html')) if isfile(join(join(app.config['UPLOAD_PATH'], 'html'), f))] 
     return jsonify(filenames)
+
+@app.route('/search/<path:path>')
+def get_files(path):
+    if(path[len(path)-3:]):
+        file_path = join(join(app.config['UPLOAD_PATH'], 'txt'), path)
+        with open(file_path) as f:
+                file_content = f.read()
+        return file_content
+    else:
+        file_path = join(join(app.config['UPLOAD_PATH'], 'html'), path)
+        f = open(file_path)
+        return f
+    
 
 if(__name__ == "__main__"):
     app.run(debug=True) 

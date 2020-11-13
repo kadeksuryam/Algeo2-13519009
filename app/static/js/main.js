@@ -74,8 +74,15 @@ $(document).ready(function(){
 
                 $("#search-item").append("<ol></ol>");
                 for(doc=0;doc<docs["result"].length;doc++){
-                    if(docs["result"][doc][4] == 'internal')
-                     $("#search-item").append(`<h4 class="mb-1"><a href=/search/${docs["result"][doc][0]}.txt target="_blank">${docs["result"][doc][0]}</a></h4>`);
+                    if(docs["result"][doc][4] == 'internal_txt'){
+                        $("#search-item").append(`<h4 class="mb-1"><a href=/search/${docs["result"][doc][0]}.txt target="_blank">${docs["result"][doc][0]}</a></h4>`);
+                    }
+                    else if(docs["result"][doc][4] == 'internal_html_namaFile'){
+                        //$("#search-item").append(`<h4 class="mb-1"><a href=/search/${docs["result"][doc][0]}.html target="_blank">${docs["result"][doc][0]}</a></h4>`);
+                    }
+                    else{
+                        $("#search-item").append(`<h4 class="mb-1"><a href=${docs["result"][doc][4]} target="_blank">${docs["result"][doc][0]}</a></h4>`);
+                    }
                     $("#search-item").append(`<p style="color:green">${docs["result"][doc][4]}</p>`)
                     $("#search-item").append(`<p>Jumlah kata: ${docs["result"][doc][1]} </p>`);
                     $("#search-item").append(`<p>Tingkat Kemiripan: ${docs["result"][doc][2]}% </p>`);
@@ -96,6 +103,7 @@ $(document).ready(function(){
             data:{text:textinlivebox},
             success:function(){
                 //alert("test");
+                $("#livebox").trigger("input");
             }
         })
     });
@@ -183,20 +191,4 @@ $(document).ready(function(){
     }
     //0console.log($('#options .row .col-md-4:nth-child(3) .fileinserver p '))
 
-    $("#vehicle1").click(function(e){
-        //alert("test");
-        textinlivebox = this.checked
-        console.log(textinlivebox);
-        $.ajax({
-            method:"post",
-            url:"/search",
-            data:{text:textinlivebox},
-            success:function(docs){
-                //alert("test");
-                $.request("/uploadajax", function(myData , status){
-                    alert(status);
-                });
-            }
-        })
-    });
 });

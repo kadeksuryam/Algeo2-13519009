@@ -13,12 +13,14 @@ from nltk.tokenize import sent_tokenize
 from nltk.stem import PorterStemmer 
 from nltk.corpus import stopwords
 from math import sqrt
-
+from lxml import html
+import requests
 #$nltk.download()
 
 def htmlToStrings(body):
     soup = BeautifulSoup(body, 'html.parser')
     texts = soup.findAll(text=True)
+    '''
     output = ''
     blacklist = [
         '[document]',
@@ -41,22 +43,8 @@ def htmlToStrings(body):
     return output
 #    visible_texts = filter(tag_visible, texts)  
 #    return u" ".join(t.strip() for t in visible_texts)
-
-#external doc dalam string
-def processExternal(externalDoc):
-    urls = externalDoc.split()
-    for url in urls:
-        html = urllib.request.urlopen(url).read()
-    #    html = htmlToStrings(html)
-        soup = BeautifulSoup(html, "html.parser")
-        text = soup.get_text()
-        _, strings = cleanTheString(text)
-        print(strings)
-        text = ''.join(strings)
-        tokens = sent_tokenize(text)
-        print(text)
-        #print(cleanTheString(text))
-    return "tes"
+    '''
+    return texts
 
 def similiarity(searchQuery_vector, doc_vec, doc):
     sum = 0
@@ -77,10 +65,9 @@ def similiarity(searchQuery_vector, doc_vec, doc):
 def getFirstSentence(txt_file_words):
     return sent_tokenize(txt_file_words)[0]
 
-def processTXT(filePath, searchQuery_vector, query_words_tunggal): 
+def processTXT(txt_file_words, searchQuery_vector, query_words_tunggal): 
     #Ubah isi dalam TXT ke vektor, sebelumnya distemming dan dibersihkan dulu
     #Ubah txt ke string dulu
-    txt_file_words = open(filePath, encoding="utf8").read()
     
     #bersihkan string
     cleanedString, _ = cleanTheString(txt_file_words)
@@ -118,10 +105,30 @@ def processTXT(filePath, searchQuery_vector, query_words_tunggal):
     
     return kemiripan, jumlahkata, kalimatPertama, txt_file_terms
 
+'''
+def processHTML(filePath, urls, searchQuery_vector, query_words_tunggal):
+    soup = BeautifulSoup(html, "html.parser")
+    text_html = soup.get_text()
+    #bersihkan string
+    cleanedString, _ = cleanTheString(txt_html)
+    kemiripan = 
+    jumlah kata = 
+    return 
+'''
+def processExternal(externalDoc, searchQuery_vector, query_words_tunggal):
+    #lakukan request
+    urls = externalDoc.split()
+    hasil_external = []
+    for url in urls:
+        html = urllib.request.urlopen(url).read()
+        #setiap html yang diterima, lakukan processing
+        soup = BeautifulSoup(html, 'html.parser')
+        texts = soup.findAll(text=True)
+        kemiripan, jumlahkata, kalimatPertama, terms = processTXT(" ".join(texts), searchQuery_vector, query_words_tunggal)
+        if(len(terms) != 0): 
+            hasil_external.append((soup.title.string, jumlahkata, kemiripan, kalimatPertama, url, terms))
 
-def processHTML(searchQuery_vector, query_words_tunggal, filePath=None, URLs=None):
-    return "tes" 
-
+    return hasil_external
 #Mengembalikan array of tuple hasil    
 def processInternal(searchQuery_vector, query_words_tunggal):
     basedir = os.path.abspath(os.path.dirname(__file__))
@@ -131,10 +138,11 @@ def processInternal(searchQuery_vector, query_words_tunggal):
     internal_txt_path = os.path.join(basedir, 'static/uploads/txt/')
     for f in listdir(internal_txt_path):
         if(isfile(join(internal_txt_path, f))):
-            kemiripan, jumlahkata, kalimatPertama, terms = processTXT(join(internal_txt_path, f), searchQuery_vector, query_words_tunggal)
+            txt_file_words = open(join(internal_txt_path, f), encoding="utf8").read()
+            kemiripan, jumlahkata, kalimatPertama, terms = processTXT(txt_file_words, searchQuery_vector, query_words_tunggal)
         #    terms = [list(item) for item in terms]
             if(len(terms) != 0): 
-                hasil_internal.append((f[:len(f)-4], jumlahkata, kemiripan, kalimatPertama, 'internal', terms))
+                hasil_internal.append((f[:len(f)-4], jumlahkata, kemiripan, kalimatPertama, 'internal_txt', terms))
  
     
     '''
@@ -146,13 +154,11 @@ def processInternal(searchQuery_vector, query_words_tunggal):
     '''
     
  #   print(hasil_internal)
-    x = lambda s : s[2]
-    hasil_internal.sort(reverse = True, key = x)
     return hasil_internal
 
 def cleanTheString(strings):
     #bersihkan dokumen terlebih dahulu dengan regex
-
+    # print(strings)
     #hapus unicode
     strings = re.sub(r'[^\x00-\x7F]+', ' ', strings)
     #hapus mentions
@@ -164,7 +170,7 @@ def cleanTheString(strings):
     #hapus angka
     strings = re.sub(r"\d+", "", strings)
     #hapus whitespace
-    strings = strings.strip()
+    strings = strings.rstrip()
 
     after_cleaning = strings
     #lakukan filtering dengan nltk
@@ -214,7 +220,11 @@ def mainSearch(searchQuery, externalDoc=""):
     search_result += processInternal(vector_query, query_words)
     
     #proses external dokumen
+    if(externalDoc != ""):
+         search_result += processExternal(externalDoc, vector_query, query_words)
 
+    x = lambda s : s[2]
+    search_result.sort(reverse = True, key = x)        
     #setelah internal dan external sudah diproses, pecah data menjadi dua bagian
     vec_terms_res = [i[5] for i in search_result]
 
@@ -224,6 +234,7 @@ def mainSearch(searchQuery, externalDoc=""):
     vec_terms = [vector_query] + vec_terms_res
     
 #    print(vec_terms)
+
     return search_result, query_words, vec_terms
     
 #    return "test"
@@ -233,4 +244,7 @@ if(__name__ == "__main__"):
 #    mainSearch("tes satu dua")
     #print(htmlToStrings(html))
     #print(htmlToStrings("https://en.wikipedia.org/wiki/Computer_science"))
-    processExternal("https://en.wikipedia.org/wiki/Algorithm    https://en.wikipedia.org/wiki/Computer_science")
+    #processExternal("https://en.wikipedia.org/wiki/Algorithm    https://en.wikipedia.org/wiki/Computer_science")
+#    print("tes")
+    search_result, query_words, vec_terms = mainSearch("tes satu dua", "https://en.wikipedia.org/wiki/Algorithm    https://en.wikipedia.org/wiki/Computer_science")
+    print(search_result)

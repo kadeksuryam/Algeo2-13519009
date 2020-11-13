@@ -21,7 +21,7 @@ def search():
     #anggap tupel berbentuk (judul, jumlahkata, tingkat kemiripan, kalimat pertama, [(term, nq, nd1, nd2...)])
     queries = request.form.get("text")
     if(queries == ""): matchDocs, terms, vec_terms = [], [], []
-    else: matchDocs, terms, vec_terms = mainSearch(queries)
+    else: matchDocs, terms, vec_terms = mainSearch(queries, externalUrls)
  #   else: matchDocs = main.mainSearch(queries, externalUrls)
     return jsonify({"result" : matchDocs, "terms" : terms, "vec_terms": vec_terms})
 

@@ -14,7 +14,7 @@ from nltk.stem import PorterStemmer
 from nltk.corpus import stopwords
 
 #$nltk.download()
-'''
+
 def htmlToStrings(body):
     soup = BeautifulSoup(body, 'html.parser')
     texts = soup.findAll(text=True)
@@ -28,6 +28,8 @@ def htmlToStrings(body):
         'head', 
         'input',
         'script',
+        'style',
+        'nav',
         # there may be more elements you don't want, such as "style", etc.
     ]
 
@@ -35,25 +37,26 @@ def htmlToStrings(body):
         if t.parent.name not in blacklist:
             output += '{} '.format(t)
 
-    return cleanTheDocument(output)
+    return output
 #    visible_texts = filter(tag_visible, texts)  
 #    return u" ".join(t.strip() for t in visible_texts)
-'''
-'''
-#Mengembalian array of tuple hasil
-def processExternal(searchQuery_vector):
+
+#external doc dalam string
+def processExternal(externalDoc):
     urls = externalDoc.split()
     for url in urls:
         html = urllib.request.urlopen(url).read()
-        html = htmlToStrings(html)
-        html_vector = documentToVector(html, searchQuery)
-        jml_kata = jumlahKata(html_vector)       
-        kemiripan = similiarity(html_vector, searchQuery_vector)
-        kalimat_pertama = firstSentence(html)
-
-        search_result.append((url, jml_kata, kemiripan, kalimat_pertama))
+    #    html = htmlToStrings(html)
+        soup = BeautifulSoup(html, "html.parser")
+        text = soup.get_text()
+        _, strings = cleanTheString(text)
+        print(strings)
+        text = ''.join(strings)
+        tokens = sent_tokenize(text)
+        print(text)
+        #print(cleanTheString(text))
     return "tes"
-'''
+
 def similiarity(searchQuery_vector, doc_vec):
     return "tes"
 
@@ -66,7 +69,7 @@ def processTXT(filePath, searchQuery_vector, query_words_tunggal):
     txt_file_words = open(filePath, encoding="utf8").read()
     
     #bersihkan string
-    cleanedString = cleanTheString(txt_file_words)
+    cleanedString, _ = cleanTheString(txt_file_words)
 #    txt_file_words = [i[0] for i in cleanedString]
 #    txt_file_words_vec = [i[1] for i in cleanedString]
 
@@ -100,10 +103,8 @@ def processTXT(filePath, searchQuery_vector, query_words_tunggal):
 
     
     return kemiripan, jumlahkata, kalimatPertama, txt_file_terms
-'''
-def processHTML(filePath=None, searchQuery_vector, query_words_tunggal): 
-    return "tes"
-'''
+
+
 def processHTML(searchQuery_vector, query_words_tunggal, filePath=None, URLs=None):
     return "tes" 
 
@@ -121,13 +122,15 @@ def processInternal(searchQuery_vector, query_words_tunggal):
             if(len(terms) != 0): 
                 hasil_internal.append((f[:len(f)-4], jumlahkata, kemiripan, kalimatPertama, 'internal', terms))
  
+    
     '''
     #proses semua html
-    external_html_path = os.path.join(basedir, 'static/uploads/html/')
+    internal_html_path = os.path.join(basedir, 'static/uploads/html/')
     for f in listdir(external_html_path):
         if(isfile(f)): processHTML(join(internal_txt_path, f), searchQuery_vector, query_words_tunggal)
         #print(f)
     '''
+    
  #   print(hasil_internal)
     return hasil_internal
 
@@ -147,6 +150,7 @@ def cleanTheString(strings):
     #hapus whitespace
     strings = strings.strip()
 
+    after_cleaning = strings
     #lakukan filtering dengan nltk
     tokens = word_tokenize(strings)
     listStopword =  set(stopwords.words('english'))
@@ -175,13 +179,13 @@ def cleanTheString(strings):
             if(word == word_tunggal): cntWord += 1
         hasil.append((word_tunggal, cntWord))
 #    print(hasil)
-    return hasil
+    return hasil, after_cleaning
     
 def mainSearch(searchQuery, externalDoc=""):
     #ubah queries menjadi vektor terlebih dahulu
     
     #bersihkan query, lakukan stemming, filtering (hapus stopwords)
-    cleaned_query = cleanTheString(searchQuery)
+    cleaned_query, _ = cleanTheString(searchQuery)
     
     vector_query = [i[1] for i in cleaned_query]
     query_words = [i[0] for i in cleaned_query]
@@ -210,6 +214,7 @@ def mainSearch(searchQuery, externalDoc=""):
 
 
 if(__name__ == "__main__"):  
-    mainSearch("tes satu dua")
+#    mainSearch("tes satu dua")
     #print(htmlToStrings(html))
     #print(htmlToStrings("https://en.wikipedia.org/wiki/Computer_science"))
+    processExternal("https://en.wikipedia.org/wiki/Algorithm    https://en.wikipedia.org/wiki/Computer_science")

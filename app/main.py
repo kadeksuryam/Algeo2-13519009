@@ -12,6 +12,7 @@ from nltk.tokenize import word_tokenize
 from nltk.tokenize import sent_tokenize
 from nltk.stem import PorterStemmer 
 from nltk.corpus import stopwords
+from math import sqrt
 
 #$nltk.download()
 
@@ -57,11 +58,24 @@ def processExternal(externalDoc):
         #print(cleanTheString(text))
     return "tes"
 
-def similiarity(searchQuery_vector, doc_vec):
-    return "tes"
+def similiarity(searchQuery_vector, doc_vec, doc):
+    sum = 0
+    idx = 0
+    square_doc = 0
+    square_search = 0
+    for kata in doc_vec:
+        sum += searchQuery_vector[idx] * doc_vec[idx]
+        square_search += (searchQuery_vector[idx]) ** 2
+        idx += 1
+    for kata in doc:
+        square_doc += kata[1]
+    if((square_search != 0) and (square_doc != 0)):
+        return(100*sum/(sqrt(square_doc * square_search)))
+    else:
+        return 0
 
 def getFirstSentence(txt_file_words):
-    return "tes"
+    return sent_tokenize(txt_file_words)[0]
 
 def processTXT(filePath, searchQuery_vector, query_words_tunggal): 
     #Ubah isi dalam TXT ke vektor, sebelumnya distemming dan dibersihkan dulu
@@ -86,14 +100,14 @@ def processTXT(filePath, searchQuery_vector, query_words_tunggal):
                 isFound = True
                 break
         if(not(isFound)): txt_file_terms.append((word_query, 0))
-        else: txt_file_vec.append(cntWord)
+        txt_file_vec.append(cntWord)
     
     #sampai disini vector yang sesuai query sudah selesai dibuat
 
     #nama dokumen tidak diproses disini
 
     #cari similiarity
-    kemiripan = similiarity(searchQuery_vector, txt_file_vec)
+    kemiripan = similiarity(searchQuery_vector, txt_file_vec, cleanedString)
     
     #cari jumlah kata
     jumlahkata = len(txt_file_words.split())
@@ -132,6 +146,8 @@ def processInternal(searchQuery_vector, query_words_tunggal):
     '''
     
  #   print(hasil_internal)
+    x = lambda s : s[2]
+    hasil_internal.sort(reverse = True, key = x)
     return hasil_internal
 
 def cleanTheString(strings):

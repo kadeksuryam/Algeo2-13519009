@@ -3,4 +3,4 @@ requests==2.24.0
 python-dotenv==0.15.0
 BeautifulSoup4
 nltk
-Sastrawi
+nltk.downloader all

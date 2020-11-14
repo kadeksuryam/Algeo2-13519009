@@ -1,9 +1,0 @@
-If you haven't programmed before, changing your way of characterizing and solving problems to one appropriate for software can take a bit of effort. If you like it once you learn, it's a good sign that you will enjoy it as a major and hopefully as a career. If after a year you don't like it and it's still confusing, I'd think twice about doing it for the rest of your life. Why not do something you enjoy instead?
-
-Other than the initial adaption to thinking algorithmically and learning a programming language, the most difficult part of software engineering is getting used to not knowing if you can do your next task.
-
-I've been programming for more than 30 years, and professionally employed as a programmer for 25. And still, most every problem I encounter I start with "oh crap, I have no idea how to do this. Can I do this?" It's only the fact that I've been able to do new tasks hundreds of times before that gives me the confidence to plow forward and learn what I need to learn. It makes the work difficult, but also extremely rewarding.
-
-There are also programming jobs which are more straightforward trade-style work, these require less learning day-to-day after an initial adaptation period.
-
-So yes, Software Engineering is difficult in some ways, but it's also a job that will constantly challenge you, and you can be learning from the first day to the last day of your career. That opportunity for diversity is not to be taken lightly.

@@ -120,14 +120,18 @@ def processExternal(externalDoc, searchQuery_vector, query_words_tunggal):
     urls = externalDoc.split()
     hasil_external = []
     for url in urls:
-        html = urllib.request.urlopen(url).read()
+        html = requests.get(url)
         #setiap html yang diterima, lakukan processing
-        soup = BeautifulSoup(html, 'html.parser')
-        texts = soup.findAll(text=True)
+        soup = BeautifulSoup(html.content, 'html.parser')
+        #texts = soup.findAll(text=True)
+        texts = []
+        for i in soup.find_all('p'):
+            texts.append(i.text)
+
         kemiripan, jumlahkata, kalimatPertama, terms = processTXT(" ".join(texts), searchQuery_vector, query_words_tunggal)
         if(len(terms) != 0): 
             hasil_external.append((soup.title.string, jumlahkata, kemiripan, kalimatPertama, url, terms))
-
+        
     return hasil_external
 #Mengembalikan array of tuple hasil    
 def processInternal(searchQuery_vector, query_words_tunggal):
@@ -144,16 +148,24 @@ def processInternal(searchQuery_vector, query_words_tunggal):
             if(len(terms) != 0): 
                 hasil_internal.append((f[:len(f)-4], jumlahkata, kemiripan, kalimatPertama, 'internal_txt', terms))
  
-    
-    '''
     #proses semua html
     internal_html_path = os.path.join(basedir, 'static/uploads/html/')
-    for f in listdir(external_html_path):
-        if(isfile(f)): processHTML(join(internal_txt_path, f), searchQuery_vector, query_words_tunggal)
-        #print(f)
-    '''
-    
+    for f in listdir(internal_html_path):
+        if(isfile(join(internal_html_path, f))):
+            html = open(join(internal_html_path, f), encoding="utf8").read()
+            #print(html)   
+            soup = BeautifulSoup(html, 'html.parser')
+            texts = []
+ 
+            for i in soup.find_all('p'):
+                texts.append(i.text)
+            #print(texts)
+            kemiripan, jumlahkata, kalimatPertama, terms = processTXT(" ".join(texts), searchQuery_vector, query_words_tunggal)
+            #print(texts)
+            if(len(terms) != 0): 
+                hasil_internal.append((soup.title.string, jumlahkata, kemiripan, kalimatPertama, 'internal_html_' + join(f[:len(f)-5]), terms))
  #   print(hasil_internal)
+    
     return hasil_internal
 
 def cleanTheString(strings):
@@ -246,5 +258,8 @@ if(__name__ == "__main__"):
     #print(htmlToStrings("https://en.wikipedia.org/wiki/Computer_science"))
     #processExternal("https://en.wikipedia.org/wiki/Algorithm    https://en.wikipedia.org/wiki/Computer_science")
 #    print("tes")
-    search_result, query_words, vec_terms = mainSearch("tes satu dua", "https://en.wikipedia.org/wiki/Algorithm    https://en.wikipedia.org/wiki/Computer_science")
-    print(search_result)
+    #search_result, query_words, vec_terms = mainSearch("computer", "https://en.wikipedia.org/wiki/Algorithm    https://en.wikipedia.org/wiki/Computer_science")
+    #print(search_result)
+    from os.path import join, dirname, realpath
+    file_path = join(join(join(dirname(realpath(__file__)), 'static/uploads/'), 'html'), 'mariana_ufo_incident_-_wikipedia.html')
+    f = open(file_path)

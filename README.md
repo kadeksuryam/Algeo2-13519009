@@ -18,12 +18,14 @@ This project is a project that is obligatory in ITB Linear Algebra and Geometric
 ## Requirements
 - Only working on windows, make sure you're using windows OS.
 - Make sure you have already installing python3, you can check them inside `cmd` by typing `py --version`
-- All requirements is inside `requirements.txt` file, you can install each requirement using python package manager (pip), by typing  `pip install package`, where package is the name package/library that's you want to install or you can just run the `run.bat` file and let the batch file do the work.
+- All requirements is inside `requirements.txt` file, you can install each requirement using python package manager (pip), by typing  `pip install package`, where package is the name package/library that's you want to install or you can just run the `run.bat` file and let the batch file do the work. Notes: Before doing this steps you need to do setting up.
 
   
 ## Setting Up
-- Open the windows command prompt
-- Clone this github repository, and create a python virtual environment using this command : `py -3 -m venv [ve]` where [ve] is the virtual environment's name, you can named that with anything.
+- Open the windows command prompt, change directory where you're gonna put this project by using `cd` command.
+- Clone this github repository using command `git clone https://github.com/kadeksuryam/Algeo2-13519009.git`
+- Change current directory to src by using this command `cd Algeo2-13519009\src`
+- Create a python virtual environment using this command : `py -3 -m venv [ve]` where [ve] is the virtual environment's name, you can named that with anything.
 - After virtual environment has created you can activate that using `[ve]\Scripts\activate`, where [ve] is your virtual environment's name.
 - Install all requirements above using `pip install -r requirements.txt`
 - Alternatively, you can just run the batch file `run.bat` that's do all the work (setting up and running the server)

@@ -75,7 +75,7 @@ src
 "Puroguramaa Okarishimasu", the creators of this search Engine is ITB student's whose are:
 - Kadek Surya Mahardika (13519165)
 - Akeyla Pradia Naufal (13519178)
-- Mochammad Facturohman (13519009)
+- Mochammad Fatchur Rochman (13519009)
 
 
 

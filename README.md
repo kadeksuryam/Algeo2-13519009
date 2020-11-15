@@ -1,11 +1,9 @@
 # A Search Engine by Puroguramaa Okarishimasu
 
-# [insert]
-[insert] is a search engine based on similiarity between content queries and documents that's computed by vectorizing the search query and documents then the similiarity can be computed using cosine formula a.k.a similiarity formula between two vectors.
+This is a search engine based on similiarity between content queries and documents that's computed by vectorizing the search query and documents then the similiarity can be computed using cosine formula a.k.a similiarity formula between two vectors.
 
 ## Table of contents
 * [General info](#general-info)
-* [Screenshots](#screenshots)
 * [Requirements](#requirements)
 * [Setting Up](#setting-up)
 * [Running](#running)
@@ -17,19 +15,17 @@
 ## General info
 This project is a project that is obligatory in ITB Linear Algebra and Geometric Course class 2020. We're expected to build a search engine website that's can find out similiarity between each documents (txt and html) that's given by user and the search queries using linear algebra concepts like vector and dot product. This project is build using two different framework that is Bootstrap for front-end and Flask for backend, also, javascript especially jQuery as connector between front-end and back-end and ofcourse html for website basic structure. 
 
-## Screenshots
-![main](./img/screenshot.png)
-
 ## Requirements
+- Only working on windows, make sure you're using windows OS.
 - Make sure you have already installing python3, you can check them inside `cmd` by typing `py --version`
 - All requirements is inside `requirements.txt` file, you can install each requirement using python package manager (pip), by typing  `pip install package`, where package is the name package/library that's you want to install or you can just run the `run.bat` file and let the batch file do the work.
 
   
 ## Setting Up
-- Clone this github repository, and create a python virtual environment using this command : `py -3 -m venv [ve]` where [ve] is the virtual environment's name you can named that with anything
+- Clone this github repository, and create a python virtual environment using this command : `py -3 -m venv [ve]` where [ve] is the virtual environment's name, you can named that with anything.
 - After virtual environment has created you can activate that using `[ve]\Scripts\activate`, where [ve] is your virtual environment's name.
-- Install all requirements above
-- Alternatively, you can just run the batch file that's do all the work (setting up and running the server)
+- Install all requirements above using `pip install -r requirements.txt`
+- Alternatively, you can just run the batch file `run.bat` that's do all the work (setting up and running the server)
 
 ## Running
 

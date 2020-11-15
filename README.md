@@ -22,6 +22,7 @@ This project is a project that is obligatory in ITB Linear Algebra and Geometric
 
   
 ## Setting Up
+- Open the windows command prompt
 - Clone this github repository, and create a python virtual environment using this command : `py -3 -m venv [ve]` where [ve] is the virtual environment's name, you can named that with anything.
 - After virtual environment has created you can activate that using `[ve]\Scripts\activate`, where [ve] is your virtual environment's name.
 - Install all requirements above using `pip install -r requirements.txt`

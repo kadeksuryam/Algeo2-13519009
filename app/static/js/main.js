@@ -28,7 +28,7 @@ $(document).ready(function(){
                 data:{text:textinlivebox},
                 success:function(docs){
                     $("#search-item").empty();
-                    if(docs.length == 0){
+                    if(docs["result"].length == 0){
                         $("#search-item").append('<div class="mt-4 text-center">');
                         //console.log('test');
                         $("#search-item .text-center:first").append(`
@@ -36,11 +36,6 @@ $(document).ready(function(){
                             <p>Try to type some keywords...</p>  
                         `);
                     }
-                    
-                    //Append term-term dari menurut dokumen pertama (lainnya akan mengikuti)
-                    //notes : tambahkan url (kalau internal bilang internal)
-                    //pada tabel, D1 adalah dokumen yang paling relevan (supaya mudah)
-                //    console.log(docs)
                     
                     $('#details .table thead tr').empty()
                     $('#details .table thead tr').append(`<th scope="col">Term</th>`)
@@ -62,26 +57,13 @@ $(document).ready(function(){
                         }
                     }
                     
-                    //Munculkan pesan
-                    
-                    /*
-                    for(var i=0;i<(docs.length-2)/2;i++){
-                    //    console.log(docs[2*i+1].length)
-                        for(var k=0;k<docs[docs.length-2].length;k++){
-                            for(var j=0;j<docs[2*i+1].length;j++){  
-                                $(`#details .table tbody .isi:nth-child(${k+1})`).append(`<td>${docs[2*i+1][j]}</td>`)
-                            } 
-                        }
-                    } */
-    
-    
                     $("#search-item").append("<ol></ol>");
                     for(doc=0;doc<docs["result"].length;doc++){
                         if(docs["result"][doc][4] == 'internal_txt'){
                             $("#search-item").append(`<h4 class="mb-1"><a href=/search/${docs["result"][doc][0]}.txt target="_blank">${docs["result"][doc][0]}</a></h4>`);
                         }
                         else if(docs["result"][doc][4] == `internal_html_${docs["result"][doc][4].substring(14)}`){
-                            console.log(docs["result"][doc][4].substring(14))
+                            //console.log(docs["result"][doc][4].substring(14))
                             $("#search-item").append(`<h4 class="mb-1"><a href=/search/${docs["result"][doc][4].substring(14)}.html target="_blank">${docs["result"][doc][0]}</a></h4>`);
                         }
                         else{
@@ -152,7 +134,7 @@ $(document).ready(function(){
 
     function fileinserver(data){
         $('#options .row .col-md-4:nth-child(3) .fileinserver').empty()
-        console.log(data.length)
+        //console.log(data.length)
         if(data.length === 0){
             $('#options .row .col-md-4:nth-child(3) p').empty();
             $('#options .row .col-md-4:nth-child(3) p').append(`Files in server: Empty`);

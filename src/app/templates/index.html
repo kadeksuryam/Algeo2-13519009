@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Search Engine</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="/static/css/main.css">
+</head>
+
+
+<body>
+    <div class="content">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="search-result-box card-box">
+                        <div class="row">
+                            <div class="col-md-8 offset-md-2">
+                                <div class="pt-3 pb-4">
+                                    <div class="input-group">
+                                        <input type="text" id="livebox" class=form-control name="inputsearch" placeholder="Input Queries Here...">
+                                        <div class="input-group-append">
+                                            <button type="button" class="btn waves-effect waves-light btn-custom" id="clear-button"><i class="fa fa-search mr-1"></i>Clear</button>
+                                        </div>
+                                    </div>
+                                    <div class="mt-4 text-center">
+                                        <h4 id="search-res-alert"></h4></div>
+                                    </div>
+                            </div>
+                        </div>
+                        <!-- end row -->
+
+                        
+                        <ul class="nav nav-tabs tabs-bordered">
+                            <li class="nav-item"><a href="#home" data-toggle="tab" aria-expanded="true" class="nav-link active">All results <span class="badge badge-success ml-1"></span></a></li>
+                            <li class="nav-item"><a href="#details" data-toggle="tab" aria-expanded="false" class="nav-link">Details</a></li>
+                            <li class="nav-item"><a href="#options" data-toggle="tab" aria-expanded="false" class="nav-link">Options</a></li>
+                            <li class="nav-item"><a href="#about" data-toggle="tab" aria-expanded="false" class="nav-link">About</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="home">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div id="search-item">
+                                            <div class="mt-4 text-center">
+                                                <p>Input Queries Are Empty...</p>
+                                                <p>Try to type some keywords...</p>  
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Details Tab -->
+                            <div class="tab-pane" id="details">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <table class="table table-hover">
+                                            <thead>
+                                              <tr>
+                                                <th scope="col">Term</th>
+                                                <th scope="col">Query</th>
+                                              </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    
+                                                </tr>
+                                            </tbody>
+                                          </table>                                          
+                                    </div>
+                                </div>
+                                <h6>Catatan: Urutan dokumen pada tabel ini sesuai pada tab "All Results"</h6>
+                            </div>
+                            <!-- end All results tab -->
+                            <!-- Options tab -->
+                            <div class="tab-pane" id="options">
+                                </br>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="external-url-list">List Of External URL</label>
+                                            <textarea class="form-control" id="external-url-list" rows="3" placeholder="Input List of URLs Here..."></textarea>
+                                        </div>
+                                    </div>
+                                    <!--
+                                    <div class="col-md-4">
+                                        
+                                        <div class="form-group">
+                                            <label for="number-of-internal-doc">Number of Internal Doc</label>
+                                            <input type="number" class="form-control" id="number-of-internal-doc" placeholder="Input 1 to 15" value="2">
+                                        </div> 
+                                    </div> -->
+                                    <div class="col-md-4">
+                                        <form id="upload-file" method="post" enctype="multipart/form-data">
+                                            <fieldset>
+                                                <p id="msg"></p>
+	                                
+                                                <label for="files[]">Select one or multiple files</label>
+                                                <input type="file" id="multiFiles" name="files[]" multiple="multiple" accept=".txt, .html">
+                                            <!--    <input name="file" type="file"> -->
+                                            </fieldset>
+                                            <fieldset>
+                                                <button id="upload-file-btn" type="button">Upload</button>
+                                            </fieldset>
+                                        </form> 
+                                        <!--
+                                        <form method="POST" enctype="multipart/form-data">
+                                            <input type="file" name="file[]" multiple="">
+                                            <input type="submit" value="add">
+                                        </form> -->
+                                    </div> 
+                                    <div class="col-md-4">
+                                        <br/><p>Files in server: Empty</p>
+                                        <div class="fileinserver"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- end Options tab -->
+                            <div class="tab-pane" id="about">
+                                <br/>
+                                <h6>About This Search Engine</h6>
+                                    <p>A search engine based on similiarity between content queries and documents.</p>
+									<p>Whenever a user type in several words, this mini search engine stems the words and remove the stopwords in search query and documents.</p>
+									<p>After that, the cleaned search query and cleande documents translated into a vector whose terms are the word counter.</p>
+									<p>For the search query vector <b><i>u</i></b> and the document vector <b><i>v</i></b>, the cosine similarity of those vectors follows this rule:</p>
+									<p style="text-align:center;line-height:1%"> <u><b><i> u</i></b>&#183;<b><i>v 	</i></b></u> </p>
+									<p style="text-align:center"> |<b><i>u</i></b>|&#183;|<b><i>v</i></b>| </p>					
+									<p>The value of this cosine similarity is between 0 and 1. The greater value of it, the closer search query match the document.</p>
+									<p>All similarity of documents with search query are counted and then ranked.</p>
+                                    <p>This is second project which is obligatory in ITB Linear Algebra and Geometric Course class 2020.</p>
+									<p>Whenever a user type in several words, this mini search engine stems the words and remove the stopwords in search query and documents.</p>
+									<p>After that, the cleaned search query and cleande documents translated into a vector whose terms are the word counter.</p>
+									<p>For the search query vector <b><i>u</i></b> and the document vector <b><i>v</i></b>, the cosine similarity of those vectors follows this rule:</p>
+									<p style="text-align:center;line-height:1%"> <u><b><i> u</i></b>&#183;<b><i>v 	</i></b></u> </p>
+									<p style="text-align:center"> |<b><i>u</i></b>|&#183;|<b><i>v</i></b>| </p>					
+									<p>The value of this cosine similarity is between 0 and 1. The greater value of it, the closer search query match the document.</p>
+									<p>All similarity of documents with search query are counted and then ranked.</p>
+                                <hr/>
+
+                                <h6>How to Use</h6>
+                                    <p>You can start searching the documents by typing some queries inside input query box</p>
+                                    <p>The results will be displayed in "All results" tab</p>
+                                    <p>You can configure the documents that's used in this search engine in "Options" tab</p>
+                                    <p>Inside "Options" tab you can add external documents (urls) or upload your own documents (html and txt file)</p>
+                                    <p>If you want to see the occurences of each term that's you input in search box, you can go to "Details" tab</p>
+                                <hr/>
+                                <h6>About Us</h6>
+                                    <p>"Puroguramaa Okarishimasu", the creators of this search Engine is ITB student's whose are:</p>
+                                    <p>Kadek Surya Mahardika</p>
+                                    <p>Akeyla Pradia Naufal</p>
+                                    <p>Mochammad Facturohman</p>
+                                <hr/>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- end row -->
+        </div>
+        <!-- container -->
+    </div>
+
+    <!--
+    <div class="buttons">
+        <button class="button" type="button" onclick="showOptions()">Options</button>
+    </div>
+    <div class="optionsBox">
+        <div class="externalDoc">
+            <p>Include External Documents (URL)</p>
+            
+            <textarea name="message" rows="10" cols="30" placeholder="Input list of urls"></textarea> 
+            <textarea name="message"></textarea>
+            <input type="submit">
+        </div>
+        <div class="internalDoc">
+            <label for="fname">Number of Internal Document: </label>
+            <input></input>
+            
+        </div> 
+    </div> -->
+</body>
+<script src="static/js/main.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</html>

@@ -1,5 +1,5 @@
 @echo off
-cd %CD%/
+cd %CD%/src/
 echo Creating the Virtual Environment...
 py -3 -m venv venv
 

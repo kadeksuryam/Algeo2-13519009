@@ -1,7 +1,7 @@
 @echo off
 cd %CD%/
 echo Creating the Virtual Environment...
-python3 -m venv venv
+py -3 -m venv venv
 
 echo --------------------------------
 echo Activating the Virtual Environment...

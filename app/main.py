@@ -7,15 +7,16 @@ import string
 from collections import OrderedDict
 from os import listdir
 from os.path import isfile, join
-#import nltk
+import nltk
 from nltk.tokenize import word_tokenize 
 from nltk.tokenize import sent_tokenize
 from nltk.stem import PorterStemmer 
 from nltk.corpus import stopwords
 from math import sqrt
-from lxml import html
 import requests
-#$nltk.download()
+
+nltk.download('stopwords')
+nltk.download('punkt')
 
 def htmlToStrings(body):
     soup = BeautifulSoup(body, 'html.parser')
@@ -56,7 +57,7 @@ def similiarity(searchQuery_vector, doc_vec, doc):
         square_search += (searchQuery_vector[idx]) ** 2
         idx += 1
     for kata in doc:
-        square_doc += kata[1]
+        square_doc += (kata[1]) ** 2
     if((square_search != 0) and (square_doc != 0)):
         return(100*sum/(sqrt(square_doc * square_search)))
     else:
